@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   TIMER                                                             10/31/2024 12:54:51 PAGE 1   
+C51 COMPILER V9.60.7.0   TIMER                                                             11/01/2024 02:44:28 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE TIMER
@@ -22,12 +22,12 @@ line level    source
   12            * @param  无
   13            * @retval 无
   14            */
-  15          void Timer0Init(void)           //50毫秒@11.0592MHz
+  15          void Timer0Init(void)           //500微秒@11.0592MHz
   16          {
   17   1              TMOD &= 0xF0;    // 清零定时器0的模式位
   18   1          TMOD |= 0x01;    // 设置定时器0为模式1（16位定时器）
-  19   1          TL0 = 0x00;      // 设置定时器0低字节初值
-  20   1          TH0 = 0x4C;      // 设置定时器0高字节初值
+  19   1          TL0 = 0x33;      // 设置定时器0低字节初值
+  20   1          TH0 = 0xFE;      // 设置定时器0高字节初值
   21   1          TF0 = 0;         // 清除定时器0的溢出标志位
   22   1          TR0 = 1;         // 启动定时器0
   23   1          ET0 = 1;         // 使能定时器0中断
@@ -39,95 +39,124 @@ line level    source
   29            * @param  无
   30            * @retval 无
   31            */
-  32          void Timer1Init(void)           //500微秒@11.0592MHz
+  32          void Timer1_Init(void)          //500微秒@11.0592MHz
   33          {
   34   1              TMOD &= 0x0F;           //设置定时器1模式
   35   1              TMOD |= 0x10;           //设置定时器1模式
-  36   1              TL1 = 0x66;             //设置定时初值
-  37   1              TH1 = 0xEA;             //设置定时初值
+  36   1              TL1 = 0;                //设置定时初值
+  37   1              TH1 = 0;                //设置定时初值
   38   1              TF1 = 0;                //清除TF1标志
-  39   1              TR1 = 1;                //定时器1开始计时
+  39   1              TR1 = 0;                //定时器1开始计时
   40   1              ET1 = 1;         // 使能定时器0中断
   41   1          EA = 1;          // 使能总中断
   42   1      }
   43          
   44          /**
-  45            * @brief  计时器中断处理函数模板
+  45            * @brief  设置计时器1的起始值
   46            * @param  无
   47            * @retval 无
   48            */
-  49          //void Timer0_Routine() interrupt 1
-  50          //{
-  51          //      static unsigned int T0Count;
-  52          //      TL0 = 0x00;             //设置定时初值
-  53          //      TH0 = 0x4C;             //设置定时初值
-  54          //      T0Count++;
-C51 COMPILER V9.60.7.0   TIMER                                                             10/31/2024 12:54:51 PAGE 2   
+  49          void Timer1_SetCounter(unsigned int Value)
+  50          {
+  51   1              TH1 = Value/256;
+  52   1              TL1 = Value%256;
+  53   1      }
+  54          
+C51 COMPILER V9.60.7.0   TIMER                                                             11/01/2024 02:44:28 PAGE 2   
 
-  55          //      if (T0Count>=1000)
-  56          //      {
-  57          //              T0Count=0;
-  58          //      }
-  59          //}
-  60          
-  61          /**
-  62            * @brief  计时器2初始化
-  63            * @param  无
-  64            * @retval 无
-  65            */
-  66          void Timer2_Init(void)
-  67          {
-  68   1              T2CON = 0;
-  69   1              TL2 = 0;
-  70   1              TH2 = 0;
-  71   1              RCAP2L = 0;
-  72   1              RCAP2H = 0;
-  73   1              TR2 = 0;
-  74   1              TF2 = 0;
-  75   1      }
-  76          
-  77          /**
-  78            * @brief  设置计时器2的起始值
-  79            * @param  无
-  80            * @retval 无
-  81            */
-  82          void Timer2_SetCounter(unsigned int Value)
-  83          {
-  84   1              TH2 = Value/256;
-  85   1              TL2 = Value%256;
-  86   1              RCAP2H= Value/256;
-  87   1              RCAP2L= Value%256;
-  88   1      }
+  55          /**
+  56            * @brief  获得计时器1的计时
+  57            * @param  无
+  58            * @retval 计时器1的计时结果
+  59            */
+  60          unsigned int Timer1_GetCounter(void)
+  61          {
+  62   1              return (TH1<<8)|TL1;
+  63   1      }
+  64          
+  65          /**
+  66            * @brief  启动/关闭计时器1
+  67            * @param  unsigned char，1表示启动，0表示关闭
+  68            * @retval 无
+  69            */
+  70          void Timer1_Run(unsigned char Flag) {
+  71   1              TR1 = Flag;
+  72   1      }
+  73          /**
+  74            * @brief  计时器中断处理函数模板
+  75            * @param  无
+  76            * @retval 无
+  77            */
+  78          //void Timer0_Routine() interrupt 1
+  79          //{
+  80          //      static unsigned int T0Count;
+  81          //      TL0 = 0x00;             //设置定时初值
+  82          //      TH0 = 0x4C;             //设置定时初值
+  83          //      T0Count++;
+  84          //      if (T0Count>=1000)
+  85          //      {
+  86          //              T0Count=0;
+  87          //      }
+  88          //}
   89          
   90          /**
-  91            * @brief  获得计时器2的计时
+  91            * @brief  计时器2初始化
   92            * @param  无
-  93            * @retval 计时器2的计时结果
+  93            * @retval 无
   94            */
-  95          unsigned int Timer2_GetCounter(void)
+  95          void Timer2_Init(void)
   96          {
-  97   1              return (TH2<<8)|TL2;
-  98   1      }
-  99          
- 100          /**
- 101            * @brief  启动/关闭计时器2
- 102            * @param  unsigned char，1表示启动，0表示关闭
- 103            * @retval 无
- 104            */
- 105          void Timer2_Run(unsigned char Flag) {
- 106   1              TR2 = Flag;
- 107   1      }
+  97   1              T2CON = 0;
+  98   1              TL2 = 0;
+  99   1              TH2 = 0;
+ 100   1              RCAP2L = 0;
+ 101   1              RCAP2H = 0;
+ 102   1              TR2 = 0;
+ 103   1              TF2 = 0;
+ 104   1      }
+ 105          
+ 106          /**
+ 107            * @brief  设置计时器2的起始值
+ 108            * @param  无
+ 109            * @retval 无
+ 110            */
+ 111          void Timer2_SetCounter(unsigned int Value)
+ 112          {
+ 113   1              TH2 = Value/256;
+ 114   1              TL2 = Value%256;
+ 115   1              RCAP2H= Value/256;
+ 116   1              RCAP2L= Value%256;
+C51 COMPILER V9.60.7.0   TIMER                                                             11/01/2024 02:44:28 PAGE 3   
+
+ 117   1      }
+ 118          
+ 119          /**
+ 120            * @brief  获得计时器2的计时
+ 121            * @param  无
+ 122            * @retval 计时器2的计时结果
+ 123            */
+ 124          unsigned int Timer2_GetCounter(void)
+ 125          {
+ 126   1              return (TH2<<8)|TL2;
+ 127   1      }
+ 128          
+ 129          /**
+ 130            * @brief  启动/关闭计时器2
+ 131            * @param  unsigned char，1表示启动，0表示关闭
+ 132            * @retval 无
+ 133            */
+ 134          void Timer2_Run(unsigned char Flag) {
+ 135   1              TR2 = Flag;
+ 136   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     92    ----
+   CODE SIZE        =    117    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
-C51 COMPILER V9.60.7.0   TIMER                                                             10/31/2024 12:54:51 PAGE 3   
-
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.
 

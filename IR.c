@@ -27,7 +27,7 @@ unsigned char IR_Command;
   */
 void IR_Init(void)
 {
-	Timer2_Init();
+	Timer1_Init();
 	Int0_Init();
 }
 
@@ -44,31 +44,6 @@ unsigned char IR_GetDataFlag(void)
 		return 1;
 	}
 	return 0;
-}
-
-/**
-  * @brief  红外遥控获取收到连发帧标志位
-  * @param  无
-  * @retval 是否收到连发帧，1为收到，0为未收到
-  */
-unsigned char IR_GetRepeatFlag(void)
-{
-	if(IR_RepeatFlag)
-	{
-		IR_RepeatFlag=0;
-		return 1;
-	}
-	return 0;
-}
-
-/**
-  * @brief  红外遥控获取收到的地址数据
-  * @param  无
-  * @retval 收到的地址数据
-  */
-unsigned char IR_GetAddress(void)
-{
-	return IR_Address;
 }
 
 /**
@@ -117,14 +92,14 @@ void Int0_Routine(void) interrupt 0
 {
 	if (IR_State==0)
 	{
-		Timer2_SetCounter(0);
-		Timer2_Run(1);
+		Timer1_SetCounter(0);
+		Timer1_Run(1);
 		IR_State = 1;
 	}
 	else if(IR_State==1)		//状态1，等待Start信号或Repeat信号
 	{
-		IR_Time=Timer2_GetCounter();	//获取上一次中断到此次中断的时间
-		Timer2_SetCounter(0);	//定时计数器清0
+		IR_Time=Timer1_GetCounter();	//获取上一次中断到此次中断的时间
+		Timer1_SetCounter(0);	//定时计数器清0
 		//如果计时为13.5ms，则接收到了Start信号（判定值在12MHz晶振下为13500，在11.0592MHz晶振下为12442）
 		if(IR_Time>12442-500 && IR_Time<12442+500)
 		{
@@ -134,7 +109,7 @@ void Int0_Routine(void) interrupt 0
 		else if(IR_Time>10368-500 && IR_Time<10368+500)
 		{
 			IR_RepeatFlag=1;	//置收到连发帧标志位为1
-			Timer2_Run(0);		//定时器停止
+			Timer1_Run(0);		//定时器停止
 			IR_State=0;			//置状态为0
 		}
 		else					//接收出错
@@ -144,8 +119,8 @@ void Int0_Routine(void) interrupt 0
 	}
 	else if(IR_State==2)		//状态2，接收数据
 	{
-		IR_Time=Timer2_GetCounter();	//获取上一次中断到此次中断的时间
-		Timer2_SetCounter(0);	//定时计数器清0
+		IR_Time=Timer1_GetCounter();	//获取上一次中断到此次中断的时间
+		Timer1_SetCounter(0);	//定时计数器清0
 		//如果计时为1120us，则接收到了数据0（判定值在12MHz晶振下为1120，在11.0592MHz晶振下为1032）
 		if(IR_Time>1032-500 && IR_Time<1032+500)
 		{
@@ -172,7 +147,7 @@ void Int0_Routine(void) interrupt 0
 				IR_Command=IR_Data[2];
 				IR_DataFlag=1;	//置收到连发帧标志位为1
 			}
-			Timer2_Run(0);		//定时器停止
+			Timer1_Run(0);		//定时器停止
 			IR_State=0;			//置状态为0
 		}
 	}

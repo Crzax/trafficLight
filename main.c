@@ -23,7 +23,7 @@ typedef struct {
 } TrafficLight;
 
 unsigned char isSet = 0;		// 是否进入设置倒计时模式
-
+extern unsigned char buzzerFlag;	// 是否开始叫的一个判断依据
 // 置黄灯
 void setYellow(TrafficLight* self) {
     P2 &= ~(1 << self->greenLightPin);  // 打开绿灯
@@ -77,7 +77,7 @@ void main() {
 	unsigned char i = 0;
 	
     Timer0Init();
-	Timer1Init();
+//	Timer1Init();
 	IR_Init();
     init();
     while(1) {
@@ -207,16 +207,17 @@ void main() {
 }
 
 /********************T0计时器中断处理-交通灯LED/数码管*************************/
-void Timer0_Routine() interrupt 1 {	// 50ms一次中断
+void Timer0_Routine() interrupt 1 {	// 500us一次中断
     static unsigned int T0Count;
     
-	TL0 = 0x00;        // 设置定时初值
-    TH0 = 0x4C;        // 设置定时初值
+	TL0 = 0x33;        // 设置定时初值
+    TH0 = 0xFE;        // 设置定时初值
+	buzzerFlag = 1;    // 500微秒置1，即1kHZ振动蜂鸣器
 	if (isSet) {T0Count = 0; return;}	// 进入设置模式，则计数器回到初始状态
     T0Count++;
 	
 	// 最后3s每1s闪一次(一次暗亮)，黄灯除外
-    if (T0Count == 10 || T0Count == 20) {
+    if (T0Count == 10*100 || T0Count == 20*100) {
         // 南北方向闪烁处理
         if (SN.time <= BLINKTIME && SN.flag != YELLOW) {   
 			SN.isBlink = !SN.isBlink;
@@ -232,7 +233,7 @@ void Timer0_Routine() interrupt 1 {	// 50ms一次中断
     }
 	
 	// 每一秒
-	if (T0Count == 20) {
+	if (T0Count == 20*100) {
 		T0Count = 0;
 		SN.time--;
 		EW.time--;

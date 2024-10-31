@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              10/31/2024 13:20:35 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              11/01/2024 02:41:28 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -33,7 +33,7 @@ line level    source
   23          } TrafficLight;
   24          
   25          unsigned char isSet = 0;                // 是否进入设置倒计时模式
-  26          
+  26          extern unsigned char buzzerFlag;        // 是否开始叫的一个判断依据
   27          // 置黄灯
   28          void setYellow(TrafficLight* self) {
   29   1          P2 &= ~(1 << self->greenLightPin);  // 打开绿灯
@@ -62,7 +62,7 @@ line level    source
   52          void blink(TrafficLight* self) {
   53   1              if (self->flag==RED) {
   54   2                      P2 ^= 1 << self->redLightPin;
-C51 COMPILER V9.60.7.0   MAIN                                                              10/31/2024 13:20:35 PAGE 2   
+C51 COMPILER V9.60.7.0   MAIN                                                              11/01/2024 02:41:28 PAGE 2   
 
   55   2              } else {
   56   2                      P2 ^= 1 << self->greenLightPin;
@@ -89,7 +89,7 @@ line level    source
   77   1              unsigned char i = 0;
   78   1              
   79   1          Timer0Init();
-  80   1              Timer1Init();
+  80   1      //      Timer1Init();
   81   1              IR_Init();
   82   1          init();
   83   1          while(1) {
@@ -126,7 +126,7 @@ line level    source
  113   2                      if (keyNum == 2 && SN.flag!=YELLOW) {
  114   3                              isSet = 1;
  115   3                              SN.time = 0;
-C51 COMPILER V9.60.7.0   MAIN                                                              10/31/2024 13:20:35 PAGE 3   
+C51 COMPILER V9.60.7.0   MAIN                                                              11/01/2024 02:41:28 PAGE 3   
 
  116   3                              // 第二个数码管不显示
  117   3                              showNum(2,666);
@@ -190,7 +190,7 @@ line level    source
  175   5                                              SN.time += IRNum;
  176   5                                              SN.time %= 100;
  177   5                                              ++i;
-C51 COMPILER V9.60.7.0   MAIN                                                              10/31/2024 13:20:35 PAGE 4   
+C51 COMPILER V9.60.7.0   MAIN                                                              11/01/2024 02:41:28 PAGE 4   
 
  178   5                                      }
  179   4                                      if (IRNum==ADDONE) {SN.time++; SN.time %= 100;}
@@ -224,64 +224,65 @@ line level    source
  207   1      }
  208          
  209          /********************T0计时器中断处理-交通灯LED/数码管*************************/
- 210          void Timer0_Routine() interrupt 1 {     // 50ms一次中断
+ 210          void Timer0_Routine() interrupt 1 {     // 500us一次中断
  211   1          static unsigned int T0Count;
  212   1          
- 213   1              TL0 = 0x00;        // 设置定时初值
- 214   1          TH0 = 0x4C;        // 设置定时初值
- 215   1              if (isSet) {T0Count = 0; return;}       // 进入设置模式，则计数器回到初始状态
- 216   1          T0Count++;
- 217   1              
- 218   1              // 最后3s每1s闪一次(一次暗亮)，黄灯除外
- 219   1          if (T0Count == 10 || T0Count == 20) {
- 220   2              // 南北方向闪烁处理
- 221   2              if (SN.time <= BLINKTIME && SN.flag != YELLOW) {   
- 222   3                              SN.isBlink = !SN.isBlink;
- 223   3                              if (SN.time == 0) SN.isBlink = 0;       // 0s应该让Blink=0，防止后面不显示
- 224   3                              blink(&SN);
- 225   3              }       
- 226   2              // 东西方向闪烁处理
- 227   2              if (EW.time <= BLINKTIME && EW.flag != YELLOW) {
- 228   3                              EW.isBlink = !EW.isBlink;
- 229   3                              if (EW.time == 0)       EW.isBlink = 0; // 0s应该让Blink=0，防止后面不显示
- 230   3                              blink(&EW);
- 231   3              }
- 232   2          }
- 233   1              
- 234   1              // 每一秒
- 235   1              if (T0Count == 20) {
- 236   2                      T0Count = 0;
- 237   2                      SN.time--;
- 238   2                      EW.time--;
- 239   2              
-C51 COMPILER V9.60.7.0   MAIN                                                              10/31/2024 13:20:35 PAGE 5   
+ 213   1              TL0 = 0x33;        // 设置定时初值
+ 214   1          TH0 = 0xFE;        // 设置定时初值
+ 215   1              buzzerFlag = 1;    // 500微秒置1，即1kHZ振动蜂鸣器
+ 216   1              if (isSet) {T0Count = 0; return;}       // 进入设置模式，则计数器回到初始状态
+ 217   1          T0Count++;
+ 218   1              
+ 219   1              // 最后3s每1s闪一次(一次暗亮)，黄灯除外
+ 220   1          if (T0Count == 10*100 || T0Count == 20*100) {
+ 221   2              // 南北方向闪烁处理
+ 222   2              if (SN.time <= BLINKTIME && SN.flag != YELLOW) {   
+ 223   3                              SN.isBlink = !SN.isBlink;
+ 224   3                              if (SN.time == 0) SN.isBlink = 0;       // 0s应该让Blink=0，防止后面不显示
+ 225   3                              blink(&SN);
+ 226   3              }       
+ 227   2              // 东西方向闪烁处理
+ 228   2              if (EW.time <= BLINKTIME && EW.flag != YELLOW) {
+ 229   3                              EW.isBlink = !EW.isBlink;
+ 230   3                              if (EW.time == 0)       EW.isBlink = 0; // 0s应该让Blink=0，防止后面不显示
+ 231   3                              blink(&EW);
+ 232   3              }
+ 233   2          }
+ 234   1              
+ 235   1              // 每一秒
+ 236   1              if (T0Count == 20*100) {
+ 237   2                      T0Count = 0;
+ 238   2                      SN.time--;
+ 239   2                      EW.time--;
+C51 COMPILER V9.60.7.0   MAIN                                                              11/01/2024 02:41:28 PAGE 5   
 
- 240   2                      // 时间到了，南北换灯
- 241   2              if (SN.time == 0) {
- 242   3                  if (SN.flag == GREEN) {
- 243   4                      setYellow(&SN);
- 244   4                  } else if (SN.flag == YELLOW) {
- 245   4                      setRed(&SN);
- 246   4                  } else if (SN.flag == RED) {
- 247   4                      setGreen(&SN);
- 248   4                  }
- 249   3              }
- 250   2                      // 时间到了，东西换灯
- 251   2              if (EW.time == 0) {
- 252   3                  if (EW.flag == GREEN) {
- 253   4                      setYellow(&EW);
- 254   4                  } else if (EW.flag == YELLOW) {
- 255   4                      setRed(&EW);
- 256   4                  } else if (EW.flag == RED) {
- 257   4                      setGreen(&EW);
- 258   4                  }
- 259   3              }
- 260   2              }
- 261   1      }
+ 240   2              
+ 241   2                      // 时间到了，南北换灯
+ 242   2              if (SN.time == 0) {
+ 243   3                  if (SN.flag == GREEN) {
+ 244   4                      setYellow(&SN);
+ 245   4                  } else if (SN.flag == YELLOW) {
+ 246   4                      setRed(&SN);
+ 247   4                  } else if (SN.flag == RED) {
+ 248   4                      setGreen(&SN);
+ 249   4                  }
+ 250   3              }
+ 251   2                      // 时间到了，东西换灯
+ 252   2              if (EW.time == 0) {
+ 253   3                  if (EW.flag == GREEN) {
+ 254   4                      setYellow(&EW);
+ 255   4                  } else if (EW.flag == YELLOW) {
+ 256   4                      setRed(&EW);
+ 257   4                  } else if (EW.flag == RED) {
+ 258   4                      setGreen(&EW);
+ 259   4                  }
+ 260   3              }
+ 261   2              }
+ 262   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1210    ----
+   CODE SIZE        =   1222    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
