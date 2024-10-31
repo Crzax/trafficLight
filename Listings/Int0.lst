@@ -1,0 +1,45 @@
+C51 COMPILER V9.60.7.0   INT0                                                              10/31/2024 12:54:51 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE INT0
+OBJECT MODULE PLACED IN .\Objects\Int0.obj
+COMPILER INVOKED BY: D:\Developer\Keil_5\C51\BIN\C51.EXE Int0.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\List
+                    -ings\Int0.lst) OBJECT(.\Objects\Int0.obj)
+
+line level    source
+
+   1          /**************************************************
+   2           * Author:       陈震雄
+   3           * Date:         2024-10-31
+   4           * Description:  外部中断0相关
+   5           **************************************************/
+   6          
+   7          #include <REGX52.H>
+   8          
+   9          
+  10          void Int0_Init(void) {
+  11   1              IT0 = 1;
+  12   1              IE0 = 0;
+  13   1              EX0=1;
+  14   1              EA=1;
+  15   1              PX0=1;
+  16   1      }
+  17          
+  18          //void Int0_Routine(void) interrupt 0
+  19          //{
+  20          //      
+  21          //}
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     11    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

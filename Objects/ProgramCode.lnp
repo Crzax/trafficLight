@@ -1,0 +1,11 @@
+".\Objects\main.obj",
+".\Objects\Delay.obj",
+".\Objects\LED.obj",
+".\Objects\Timer.obj",
+".\Objects\Key.obj",
+".\Objects\Buzzer.obj",
+".\Objects\MatrixKey.obj",
+".\Objects\Int0.obj",
+".\Objects\IR.obj" 
+TO ".\Objects\ProgramCode" 
+PRINT(".\Listings\ProgramCode.m51") RAMSIZE(256) 

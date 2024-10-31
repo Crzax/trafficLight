@@ -1,0 +1,100 @@
+C51 COMPILER V9.60.7.0   LED                                                               10/31/2024 12:54:51 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LED
+OBJECT MODULE PLACED IN .\Objects\LED.obj
+COMPILER INVOKED BY: D:\Developer\Keil_5\C51\BIN\C51.EXE LED.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listi
+                    -ngs\LED.lst) OBJECT(.\Objects\LED.obj)
+
+line level    source
+
+   1          /**************************************************
+   2           * Author:       陈震雄
+   3           * Date:         2024-10-29
+   4           * Description:  与LED操作有关
+   5           **************************************************/
+   6          
+   7          #include <REGX52.H>
+   8          #include "Delay.h"
+   9          
+  10          // 数码管段选表
+  11          unsigned char code NixieTable[]={0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,0x7F,0x6F,0x00};
+  12          
+  13          /**
+  14            * @brief  数码管显示
+  15            * @param  Location: 指定8个数码管的一个
+  16            * @param  Number: 该位置显示的数字
+  17            * @retval 无
+  18            */
+  19          void nixie(unsigned char Location, Number)
+  20          {
+  21   1              switch(Location)                
+  22   1              {
+  23   2                      case 1:P2_4=1;P2_3=1;P2_2=1;break;
+  24   2                      case 2:P2_4=1;P2_3=1;P2_2=0;break;
+  25   2                      case 3:P2_4=1;P2_3=0;P2_2=1;break;
+  26   2                      case 4:P2_4=1;P2_3=0;P2_2=0;break;
+  27   2                      case 5:P2_4=0;P2_3=1;P2_2=1;break;
+  28   2                      case 6:P2_4=0;P2_3=1;P2_2=0;break;
+  29   2                      case 7:P2_4=0;P2_3=0;P2_2=1;break;
+  30   2                      case 8:P2_4=0;P2_3=0;P2_2=0;break;
+  31   2              }
+  32   1              P0=NixieTable[Number];  
+  33   1              
+  34   1              // 清零消影
+  35   1              delay(1);                               
+  36   1              P0=0x00;                                
+  37   1      }
+  38          
+  39          /**
+  40            * @brief  输入数字，选择在前半部分显示还是后半部分
+  41            * @param  无
+  42            * @retval 无
+  43            */
+  44          void showNum(unsigned char loc, num) 
+  45          {
+  46   1              
+  47   1              if (loc == 1){
+  48   2                      if (num == 666) {
+  49   3                              nixie(1,10);
+  50   3                              nixie(2,10);
+  51   3                              nixie(3,10);
+  52   3                      }else{
+  53   3                              nixie(1,num/100);
+  54   3                              num %= 100;
+C51 COMPILER V9.60.7.0   LED                                                               10/31/2024 12:54:51 PAGE 2   
+
+  55   3                              nixie(2,num/10);
+  56   3                              nixie(3,num%10);
+  57   3      //                      nixie(1,num/10);
+  58   3      //                      nixie(2,num%10);
+  59   3                      }
+  60   2              } else {
+  61   2                      if (num == 666) {
+  62   3                              nixie(1,10);
+  63   3                              nixie(2,10);
+  64   3                              nixie(3,10);
+  65   3                      }else{
+  66   3                              nixie(5,num/100);
+  67   3                              num %= 100;
+  68   3                              nixie(6,num/10);
+  69   3                              nixie(7,num%10);
+  70   3      //                      nixie(5,num/10);
+  71   3      //                      nixie(6,num%10);
+  72   3                      }
+  73   2              }
+  74   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    313    ----
+   CONSTANT SIZE    =     11    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

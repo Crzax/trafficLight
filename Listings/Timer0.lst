@@ -1,0 +1,66 @@
+C51 COMPILER V9.60.7.0   TIMER0                                                            10/30/2024 12:21:17 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE TIMER0
+OBJECT MODULE PLACED IN .\Objects\Timer0.obj
+COMPILER INVOKED BY: D:\Developer\Keil_5\C51\BIN\C51.EXE Timer0.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Li
+                    -stings\Timer0.lst) OBJECT(.\Objects\Timer0.obj)
+
+line level    source
+
+   1          /**************************************************
+   2           * Author:       陈震雄
+   3           * Date:         2024-10-29
+   4           * Description:  与定时器0有关
+   5           **************************************************/
+   6          
+   7          
+   8          #include <REGX52.H>
+   9          
+  10          /**
+  11            * @brief  上电初始化，启动定时器0
+  12            * @param  无
+  13            * @retval 无
+  14            */
+  15          void Timer0Init(void)           //1毫秒@11.0592MHz
+  16          {
+  17   1              TMOD &= 0xF0;    // 清零定时器0的模式位
+  18   1          TMOD |= 0x01;    // 设置定时器0为模式1（16位定时器）
+  19   1          TL0 = 0x00;      // 设置定时器0低字节初值
+  20   1          TH0 = 0x4C;      // 设置定时器0高字节初值
+  21   1          TF0 = 0;         // 清除定时器0的溢出标志位
+  22   1          TR0 = 1;         // 启动定时器0
+  23   1          ET0 = 1;         // 使能定时器0中断
+  24   1          EA = 1;          // 使能总中断
+  25   1      }
+  26          
+  27          /**
+  28            * @brief  计时器中断处理函数模板
+  29            * @param  无
+  30            * @retval 无
+  31            */
+  32          //void Timer0_Routine() interrupt 1
+  33          //{
+  34          //      static unsigned int T0Count;
+  35          //      TL0 = 0x00;             //设置定时初值
+  36          //      TH0 = 0x4C;             //设置定时初值
+  37          //      T0Count++;
+  38          //      if (T0Count>=1000)
+  39          //      {
+  40          //              T0Count=0;
+  41          //      }
+  42          //}
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     21    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
