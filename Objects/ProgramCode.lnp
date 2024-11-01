@@ -6,6 +6,8 @@
 ".\Objects\Buzzer.obj",
 ".\Objects\MatrixKey.obj",
 ".\Objects\Int0.obj",
-".\Objects\IR.obj" 
+".\Objects\IR.obj",
+".\Objects\DS18B20.obj",
+".\Objects\OneWire.obj" 
 TO ".\Objects\ProgramCode" 
 PRINT(".\Listings\ProgramCode.m51") RAMSIZE(256) 

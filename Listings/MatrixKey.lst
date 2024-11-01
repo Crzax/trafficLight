@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MATRIXKEY                                                         11/01/2024 02:23:07 PAGE 1   
+C51 COMPILER V9.60.7.0   MATRIXKEY                                                         11/01/2024 22:45:59 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MATRIXKEY
@@ -18,51 +18,51 @@ line level    source
    8          #include "Delay.h"
    9          #include "TrafficLight.h"
   10          /**
-  11            * @brief  矩阵键盘读取按键键码
+  11            * @brief  矩阵键盘读取按键对应设定含义
   12            * @param  无
-  13            * @retval KeyNumber 按下按键的键码值
-  14                                  如果按键按下不放，程序会停留在此函数，松手的一瞬间，返回按键键码，没�
-             -��按键按下时，返回INVALID
+  13            * @retval KeyNumber 按下按键的对应设定含义
+  14                                  如果按键按下不放，程序会停留在此函数，松手的一瞬间，返回按键对应设定�
+             -��义，没有按键按下时，返回INVALID
   15            */
   16          unsigned char matrixKey()       
   17          {
   18   1              unsigned char KeyNumber=INVALID;
   19   1              
-  20   1              P1=0xFF;
+  20   1              P1=0xFE;
   21   1              P1_3=0;
   22   1              if(P1_7==0){delay(20);while(P1_7==0);delay(20);KeyNumber=1;}
-  23   1              if(P1_6==0){delay(20);while(P1_6==0);delay(20);KeyNumber=5;}
-  24   1              if(P1_5==0){delay(20);while(P1_5==0);delay(20);KeyNumber=9;}
-  25   1              if(P1_4==0){delay(20);while(P1_4==0);delay(20);KeyNumber=13;}
+  23   1              if(P1_6==0){delay(20);while(P1_6==0);delay(20);KeyNumber=4;}
+  24   1              if(P1_5==0){delay(20);while(P1_5==0);delay(20);KeyNumber=7;}
+  25   1              if(P1_4==0){delay(20);while(P1_4==0);delay(20);KeyNumber=10;}
   26   1              
-  27   1              P1=0xFF;
+  27   1              P1=0xFE;
   28   1              P1_2=0;
   29   1              if(P1_7==0){delay(20);while(P1_7==0);delay(20);KeyNumber=2;}
-  30   1              if(P1_6==0){delay(20);while(P1_6==0);delay(20);KeyNumber=6;}
-  31   1              if(P1_5==0){delay(20);while(P1_5==0);delay(20);KeyNumber=10;}
-  32   1              if(P1_4==0){delay(20);while(P1_4==0);delay(20);KeyNumber=14;}
+  30   1              if(P1_6==0){delay(20);while(P1_6==0);delay(20);KeyNumber=5;}
+  31   1              if(P1_5==0){delay(20);while(P1_5==0);delay(20);KeyNumber=8;}
+  32   1              if(P1_4==0){delay(20);while(P1_4==0);delay(20);KeyNumber=CLEAR;}
   33   1              
-  34   1              P1=0xFF;
+  34   1              P1=0xFE;
   35   1              P1_1=0;
   36   1              if(P1_7==0){delay(20);while(P1_7==0);delay(20);KeyNumber=3;}
-  37   1              if(P1_6==0){delay(20);while(P1_6==0);delay(20);KeyNumber=7;}
-  38   1              if(P1_5==0){delay(20);while(P1_5==0);delay(20);KeyNumber=11;}
-  39   1              if(P1_4==0){delay(20);while(P1_4==0);delay(20);KeyNumber=15;}
+  37   1              if(P1_6==0){delay(20);while(P1_6==0);delay(20);KeyNumber=6;}
+  38   1              if(P1_5==0){delay(20);while(P1_5==0);delay(20);KeyNumber=9;}
+  39   1              if(P1_4==0){delay(20);while(P1_4==0);delay(20);KeyNumber=OK;}
   40   1              
-  41   1              P1=0xFF;
-  42   1              P1_0=0;
-  43   1              if(P1_7==0){delay(20);while(P1_7==0);delay(20);KeyNumber=4;}
-  44   1              if(P1_6==0){delay(20);while(P1_6==0);delay(20);KeyNumber=8;}
-  45   1              if(P1_5==0){delay(20);while(P1_5==0);delay(20);KeyNumber=12;}
-  46   1              if(P1_4==0){delay(20);while(P1_4==0);delay(20);KeyNumber=16;}
+  41   1      //      P1=0xFE;
+  42   1      //      P1_0=0;
+  43   1      //      if(P1_7==0){delay(20);while(P1_7==0);delay(20);KeyNumber=4;}
+  44   1      //      if(P1_6==0){delay(20);while(P1_6==0);delay(20);KeyNumber=8;}
+  45   1      //      if(P1_5==0){delay(20);while(P1_5==0);delay(20);KeyNumber=12;}
+  46   1      //      if(P1_4==0){delay(20);while(P1_4==0);delay(20);KeyNumber=16;}
   47   1              
   48   1              return KeyNumber;
   49   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    394    ----
-C51 COMPILER V9.60.7.0   MATRIXKEY                                                         11/01/2024 02:23:07 PAGE 2   
+   CODE SIZE        =    297    ----
+C51 COMPILER V9.60.7.0   MATRIXKEY                                                         11/01/2024 22:45:59 PAGE 2   
 
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----

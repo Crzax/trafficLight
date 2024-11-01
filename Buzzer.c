@@ -11,7 +11,7 @@ sbit Buzzer = P2^5;
 unsigned char buzzerFlag = 0;
 
 /**
-  * @brief  让蜂鸣器开始鸣叫，与T1计时器一起使用，1kHz
+  * @brief  让蜂鸣器开始鸣叫，与T0计时器一起使用，1kHz
   * @param  无
   * @retval 无
   */

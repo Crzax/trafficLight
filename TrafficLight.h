@@ -15,11 +15,11 @@
 #define REDTIME 16		// 红灯时间
 #define YELLOWTIME 3	// 黄灯时间
 #define BLINKTIME 3     // 进入闪烁的时间
-#define BUZZERTIME 3	// 进入叫的时间
-#define ADDONE 11
-#define SUBONE 12
-#define CLEAR 13
-#define OK 14
-#define INVALID 15
-
+#define BUZZERTIME 6	// 进入叫的时间
+#define ADDONE 11			// 倒计时加1
+#define SUBONE 12			// 倒计时加1
+#define CLEAR 13			// 倒计时清零
+#define OK 14					// 倒计时确认
+#define INVALID 15		// 不合法的控制信号，这样
+#define TH  28				// 温度阈值
 #endif

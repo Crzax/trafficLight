@@ -4,7 +4,6 @@
  * Description:  与定时器有关
  **************************************************/
 
-
 #include <REGX52.H>
 
 /**
@@ -69,68 +68,4 @@ unsigned int Timer1_GetCounter(void)
   */
 void Timer1_Run(unsigned char Flag) {
 	TR1 = Flag;
-}
-/**
-  * @brief  计时器中断处理函数模板
-  * @param  无
-  * @retval 无
-  */
-//void Timer0_Routine() interrupt 1
-//{
-//	static unsigned int T0Count;
-//	TL0 = 0x00;		//设置定时初值
-//	TH0 = 0x4C;		//设置定时初值
-//	T0Count++;
-//	if (T0Count>=1000)
-//	{
-//		T0Count=0;
-//	}
-//}
-
-/**
-  * @brief  计时器2初始化
-  * @param  无
-  * @retval 无
-  */
-void Timer2_Init(void)
-{
-	T2CON = 0;
-	TL2 = 0;
-	TH2 = 0;
-	RCAP2L = 0;
-	RCAP2H = 0;
-	TR2 = 0;
-	TF2 = 0;
-}
-
-/**
-  * @brief  设置计时器2的起始值
-  * @param  无
-  * @retval 无
-  */
-void Timer2_SetCounter(unsigned int Value)
-{
-	TH2 = Value/256;
-	TL2 = Value%256;
-	RCAP2H= Value/256;
-	RCAP2L= Value%256;
-}
-
-/**
-  * @brief  获得计时器2的计时
-  * @param  无
-  * @retval 计时器2的计时结果
-  */
-unsigned int Timer2_GetCounter(void)
-{
-	return (TH2<<8)|TL2;
-}
-
-/**
-  * @brief  启动/关闭计时器2
-  * @param  unsigned char，1表示启动，0表示关闭
-  * @retval 无
-  */
-void Timer2_Run(unsigned char Flag) {
-	TR2 = Flag;
 }

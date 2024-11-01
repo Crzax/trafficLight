@@ -11,7 +11,8 @@
 #include "Key.h"
 #include "MatrixKey.h"
 #include "IR.h"
-
+#include "DS18B20.h"
+#include "Delay.h"
 /**************************交通灯************************************/
 // 交通灯结构体
 typedef struct {
@@ -23,6 +24,9 @@ typedef struct {
 } TrafficLight;
 
 unsigned char isSet = 0;		// 是否进入设置倒计时模式
+sbit motor = P1^0;				// 电风扇
+sbit Buzzer = P2^5;					// 蜂鸣器
+extern float t;						// 当前温度的值
 extern unsigned char buzzerFlag;	// 是否开始叫的一个判断依据
 // 置黄灯
 void setYellow(TrafficLight* self) {
@@ -67,6 +71,12 @@ TrafficLight EW = {6, 7, REDTIME, RED,0};
 void init() {
     setGreen(&SN);
     setRed(&EW);
+	Timer0Init();
+	IR_Init();
+	Buzzer = 0;		// 防止蜂鸣器一通电就响
+	motor = 0;		// 防止风扇一开始就转
+	DS18B20_ConvertT();		//上电先转换一次温度，防止第一次读数据错误
+	delay(1000);
 }
 
 /**************************主函数************************************/
@@ -75,11 +85,10 @@ void main() {
 	unsigned char matrixKeyNum = INVALID;	
 	unsigned char IRNum = INVALID;
 	unsigned char i = 0;
+	float T = 0;
 	
-    Timer0Init();
-//	Timer1Init();
-	IR_Init();
     init();
+
     while(1) {
 		/**************************低于3s闪烁，否则正常(黄灯除外)**************************/
 		if (SN.isBlink) {	
@@ -109,6 +118,12 @@ void main() {
 			EW.time += 3;
 		}
 		
+		/**************************温度过高，开始吹风扇**************************/
+		T=getT();	//读取温度
+		if (T>TH) 
+			motor = 1;
+		else
+			motor = 0;
 		/**************************设置倒计时模式(矩阵键盘)**************************/
 		if (keyNum == 2 && SN.flag!=YELLOW) {
 			isSet = 1;
@@ -208,11 +223,18 @@ void main() {
 
 /********************T0计时器中断处理-交通灯LED/数码管*************************/
 void Timer0_Routine() interrupt 1 {	// 500us一次中断
-    static unsigned int T0Count;
-    
+    static unsigned int T0Count = 0;
+	static unsigned int waitForGetT = 0;	// 1500次，即750ms，用于读取温度值
 	TL0 = 0x33;        // 设置定时初值
     TH0 = 0xFE;        // 设置定时初值
 	buzzerFlag = 1;    // 500微秒置1，即1kHZ振动蜂鸣器
+	// 读取温度值
+	waitForGetT++;
+	if (waitForGetT>=1500) {
+		waitForGetT = 0;
+		t = DS18B20_ReadT();
+	}
+	
 	if (isSet) {T0Count = 0; return;}	// 进入设置模式，则计数器回到初始状态
     T0Count++;
 	

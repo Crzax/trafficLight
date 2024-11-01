@@ -3,5 +3,5 @@
 
 void DS18B20_ConvertT(void);
 float DS18B20_ReadT(void);
-
+float getT(void);
 #endif

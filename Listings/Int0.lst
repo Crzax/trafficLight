@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   INT0                                                              11/01/2024 02:23:07 PAGE 1   
+C51 COMPILER V9.60.7.0   INT0                                                              11/01/2024 22:45:59 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE INT0
@@ -11,7 +11,7 @@ line level    source
    1          /**************************************************
    2           * Author:       陈震雄
    3           * Date:         2024-10-31
-   4           * Description:  外部中断0相关
+   4           * Description:  外部中断0相关，用于红外遥控
    5           **************************************************/
    6          
    7          #include <REGX52.H>

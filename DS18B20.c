@@ -1,3 +1,8 @@
+/**************************************************
+ * Author:       陈震雄
+ * Date:         2024-11-1
+ * Description:  温度传感器
+ **************************************************/
 #include <REGX52.H>
 #include "OneWire.h"
 
@@ -6,6 +11,7 @@
 #define DS18B20_CONVERT_T			0x44
 #define DS18B20_READ_SCRATCHPAD 	0xBE
 
+float t = 0;
 /**
   * @brief  DS18B20开始温度变换
   * @param  无
@@ -36,4 +42,15 @@ float DS18B20_ReadT(void)
 	Temp=(TMSB<<8)|TLSB;
 	T=Temp/16.0;
 	return T;
+}
+
+/**
+  * @brief 返回温度变换后50ms读取的温度值
+  * @param  无
+  * @retval 温度数值
+  */
+float getT(void) 
+{
+	DS18B20_ConvertT();
+	return t;
 }
