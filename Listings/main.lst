@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              11/01/2024 22:55:57 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              11/02/2024 12:21:15 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -62,7 +62,7 @@ line level    source
   52   1          self->time = REDTIME;
   53   1      }
   54          
-C51 COMPILER V9.60.7.0   MAIN                                                              11/01/2024 22:55:57 PAGE 2   
+C51 COMPILER V9.60.7.0   MAIN                                                              11/02/2024 12:21:15 PAGE 2   
 
   55          // 闪烁
   56          void blink(TrafficLight* self) {
@@ -114,7 +114,7 @@ line level    source
  102   3                              showNum(2, EW.time);
  103   3                      }
  104   2                      
- 105   2                      /**************************绿灯&&低于3s开始鸣叫**************************/
+ 105   2                      /**************************绿灯&&低于BUZZERTIME开始鸣叫**************************/
  106   2                      if (SN.flag==GREEN&&SN.time<=BUZZERTIME) {
  107   3                              setBuzzer();
  108   3                      }
@@ -126,7 +126,7 @@ line level    source
  114   2                      /*************紧急情况，延长红灯时间3秒(对应另一个路口它的状态也延长三秒)***
              -*************/
  115   2                      keyNum = Key();
-C51 COMPILER V9.60.7.0   MAIN                                                              11/01/2024 22:55:57 PAGE 3   
+C51 COMPILER V9.60.7.0   MAIN                                                              11/02/2024 12:21:15 PAGE 3   
 
  116   2                      if (keyNum==1) {
  117   3                              SN.time += 3;
@@ -190,7 +190,7 @@ line level    source
  175   2                      if (IR_GetDataFlag() && IR_GetCommand() == IR_MODE) {
  176   3                              isSet = 1;
  177   3                              SN.time = 0;
-C51 COMPILER V9.60.7.0   MAIN                                                              11/01/2024 22:55:57 PAGE 4   
+C51 COMPILER V9.60.7.0   MAIN                                                              11/02/2024 12:21:15 PAGE 4   
 
  178   3                              
  179   3                              // 第二个数码管不显示
@@ -254,7 +254,7 @@ line level    source
  237   1              
  238   1              if (isSet) {T0Count = 0; return;}       // 进入设置模式，则计数器回到初始状态
  239   1          T0Count++;
-C51 COMPILER V9.60.7.0   MAIN                                                              11/01/2024 22:55:57 PAGE 5   
+C51 COMPILER V9.60.7.0   MAIN                                                              11/02/2024 12:21:15 PAGE 5   
 
  240   1              
  241   1              // 最后3s每1s闪一次(一次暗亮)，黄灯除外
