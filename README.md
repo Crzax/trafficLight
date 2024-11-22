@@ -4,15 +4,13 @@
 
 [![Keil 8051](https://img.shields.io/badge/Keil-8051-blue)](https://www.keil.com/download/product/)
 
+[English version](README-en.md)
+
 ## 项目简介
 本项目是2023-2024学年武汉大学嵌入式系统课堂第二次作业。本项目基于 STC89C52RC 单片机设计了一个智能交通灯控制系统，模拟现实生活中的十字路口信号灯运行。功能包括倒计时显示、红灯延时、信号灯状态设置等，扩展实现了语音提示、温度检测与风扇控制等附加功能。
 
 ---
 
-## 项目环境
-
-
----
 
 ## 功能实现
 
