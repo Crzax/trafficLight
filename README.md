@@ -1,7 +1,5 @@
 # 基于 51 单片机的智能交通灯设计
 
----
-
 [![Keil 8051](https://img.shields.io/badge/Keil-8051-blue)](https://www.keil.com/download/product/)
 
 [English version](README-en.md)
