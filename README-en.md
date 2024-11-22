@@ -35,3 +35,7 @@ This project is the second assignment for the 2023-2024 academic year Embedded S
    - Supports setting countdown times via an infrared remote control.
 5. **Temperature Sensing and Fan Control**:
    - Uses a DS18B20 temperature sensor to detect temperature, automatically activating the fan for cooling when the temperature exceeds a set threshold.
+
+## Design Scheme
+
+See [设计方案.pdf](设计方案.pdf)
